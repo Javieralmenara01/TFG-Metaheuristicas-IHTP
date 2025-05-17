@@ -12,8 +12,13 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 # Agrega la ruta a vcpkg
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 
+find_package(Threads REQUIRED)
+
 # Añade el ejecutable
 add_executable(main main.cc src/Functions.cc src/ProblemInstance.cc src/MetaHeuristicSolver.cc src/Solver.cc)
 
 # Incluye el directorio de encabezados de vcpkg
-target_include_directories(main PRIVATE "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-osx/include")
+target_include_directories(main PRIVATE "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-linux/include")
+
+# Link pthreads
+target_link_libraries(main PRIVATE Threads::Threads)

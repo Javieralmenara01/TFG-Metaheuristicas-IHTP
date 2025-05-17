@@ -51,6 +51,11 @@ class Solver {
   std::string assignOperatingTheater(const Patient &patient, int day);
   void assignRoom(const Patient &patient, int day, const std::string &room_id);
 
+  // Reparación de asignaciones
+  bool repairMandatoryPatient(const Patient &patient, EncodedPatientSolution &enc);
+  bool repairOptionalPatient(const Patient &patient, EncodedPatientSolution &enc);
+  
+
   // Cálculo de restricciones blandas
   int calculateSoftConstraints(); // Cálculo de la función objetivo (suma de penalizaciones)
   int calculateAgeGroupPenalty(); // Cálculo de S1

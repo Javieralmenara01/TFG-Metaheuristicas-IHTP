@@ -289,6 +289,94 @@ void Solver::assignRoom(const Patient &patient, int day, const std::string &room
 }
 
 /**
+ * Intenta reparar la asignación de un paciente obligatorio modificando el día de admisión y la habitación asignada.
+ *
+ * @param patient El paciente obligatorio a reparar.
+ * @param enc Referencia a la solución codificada correspondiente al paciente, cuyos parámetros se modificarán.
+ * @return true si se encontró una asignación factible; false en caso contrario.
+ */
+ bool Solver::repairMandatoryPatient(const Patient &patient, EncodedPatientSolution &enc) {
+  // Recorremos todos los días válidos (desde surgery_release_day hasta surgery_due_day)
+  for (int newDay = patient.surgery_release_day; newDay <= patient.surgery_due_day && newDay < problem.days; ++newDay) {
+    // Recorremos todas las habitaciones disponibles en la instancia
+    for (const auto &room : problem.rooms) {
+      // Saltamos las habitaciones incompatibles para el paciente.
+      if (std::find(patient.incompatible_room_ids.begin(), patient.incompatible_room_ids.end(), room.id) != patient.incompatible_room_ids.end()) {
+        continue;
+      }
+      
+      // Guardamos los valores actuales para poder revertir en caso de no lograr la reparación.
+      int oldDay = enc.admission_day;
+      std::string oldRoom = enc.room_id;
+      
+      // Asignamos los valores candidatos.
+      enc.admission_day = newDay;
+      enc.room_id = room.id;
+      
+      // Verificamos que se cumplan las restricciones de cirujano, quirófano y habitación.
+      if ( checkSurgeonAvailability(patient, newDay) &&
+           checkOperatingTheaterAvailability(patient, newDay) &&
+           checkRoomAvailability(patient, newDay, room.id) ) {
+        // std::cout << "Reparación exitosa para el paciente obligatorio " << patient.id << " con día " << newDay << " y habitación " << room.id << std::endl;
+        return true;
+      } else {
+        // Si no cumple, revertimos y seguimos probando.
+        enc.admission_day = oldDay;
+        enc.room_id = oldRoom;
+      }
+    }
+  }
+  // Si se agotaron todas las posibilidades, la reparación falla.
+  // std::cout << "No se pudo reparar la asignación para el paciente obligatorio " << patient.id << std::endl;
+  return false;
+}
+
+/**
+ * Intenta reparar la asignación de un paciente opcional modificando el día de admisión y la habitación asignada.
+ * Se realizan varios intentos antes de abandonar.
+ *
+ * @param patient El paciente opcional a reparar.
+ * @param enc Referencia a la solución codificada correspondiente al paciente, cuyos parámetros se modificarán.
+ * @return true si se encontró una asignación factible; false en caso contrario.
+ */
+bool Solver::repairOptionalPatient(const Patient &patient, EncodedPatientSolution &enc) {
+  const int MAX_ATTEMPTS = 5;
+  int attempt = 0;
+  
+  while (attempt < MAX_ATTEMPTS) {
+    // Recorremos todos los días válidos desde la fecha de liberación hasta el último día disponible
+    for (int newDay = patient.surgery_release_day; newDay < problem.days; ++newDay) {
+      for (const auto &room : problem.rooms) {
+        // Saltamos las habitaciones incompatibles.
+        if (std::find(patient.incompatible_room_ids.begin(), patient.incompatible_room_ids.end(), room.id) != patient.incompatible_room_ids.end()) {
+          continue;
+        }
+        
+        int oldDay = enc.admission_day;
+        std::string oldRoom = enc.room_id;
+        
+        enc.admission_day = newDay;
+        enc.room_id = room.id;
+        
+        if (checkSurgeonAvailability(patient, newDay) &&
+            checkOperatingTheaterAvailability(patient, newDay) &&
+            checkRoomAvailability(patient, newDay, room.id)) {
+          // std::cout << "Reparación exitosa para el paciente opcional " << patient.id << " en intento " << attempt + 1 << " con día " << newDay << " y habitación " << room.id << std::endl;
+          return true;
+        } else {
+          enc.admission_day = oldDay;
+          enc.room_id = oldRoom;
+        }
+      }
+    }
+    attempt++;
+  }
+  
+  // std::cout << "No se pudo reparar la asignación para el paciente opcional " << patient.id << " tras " << MAX_ATTEMPTS << " intentos." << std::endl;
+  return false;
+}
+
+/**
  * Resuelve el problema de asignación hospitalaria a partir de una solución codificada.
  * @param encodedSolution Solución codificada inicial.
  */
@@ -296,8 +384,23 @@ std::pair<int,int> Solver::solve(EncodedSolution& encodedSolution) {
   // Reinicializa los estados dinámicos de la solución (habitaciones, quirófanos y enfermeras)
   initializeDynamicStates();
    
+ // Particionar la población codificada en pacientes obligatorios y opcionales.
+  std::vector<EncodedPatientSolution> mandatoryEnc, optionalEnc;
+  for (const auto &enc : encodedSolution.encoded_patients) {
+    // Buscar el paciente correspondiente.
+    auto patientIt = std::find_if(problem.patients.begin(), problem.patients.end(),
+                                  [&enc](const Patient &p) { return p.id == enc.patient_id; });
+    if (patientIt == problem.patients.end()) {
+      throw std::runtime_error("Paciente codificado " + enc.patient_id + " no encontrado.");
+    }
+    if (patientIt->mandatory)
+      mandatoryEnc.push_back(enc);
+    else
+      optionalEnc.push_back(enc);
+  }
+  
   // --- Procesar pacientes obligatorios ---
-  for (auto &enc : encodedSolution.encoded_patients) {
+  for (auto &enc : mandatoryEnc) {
     
     auto patientIt = std::find_if(problem.patients.begin(), problem.patients.end(),
                                   [&enc](const Patient &p) { return p.id == enc.patient_id; });
@@ -311,8 +414,14 @@ std::pair<int,int> Solver::solve(EncodedSolution& encodedSolution) {
     if (!checkSurgeonAvailability(patient, admissionDay) ||
         !checkOperatingTheaterAvailability(patient, admissionDay) ||
         !checkRoomAvailability(patient, admissionDay, enc.room_id)) {
-      solution.patients.push_back({ patient.id });
-      continue;
+      
+      // Intentar reparar para el paciente obligatorio.
+      if (!repairMandatoryPatient(patient, enc)) {
+        solution.patients.push_back({ patient.id });
+        continue;
+      }
+      // Actualizar el día de admisión tras la reparación.
+      admissionDay = enc.admission_day;
     }
     
     // Realizar asignaciones (cirujano, quirófano y habitación)
@@ -321,6 +430,36 @@ std::pair<int,int> Solver::solve(EncodedSolution& encodedSolution) {
     assignRoom(patient, admissionDay, enc.room_id);
     solution.patients.push_back({ patient.id, admissionDay, enc.room_id, theater_id });
   }
+  
+  // --- Procesar pacientes opcionales ---
+  for (auto &enc : optionalEnc) {
+    auto patientIt = std::find_if(problem.patients.begin(), problem.patients.end(),
+                                  [&enc](const Patient &p) { return p.id == enc.patient_id; });
+    if (patientIt == problem.patients.end()) {
+      throw std::runtime_error("Paciente codificado " + enc.patient_id + " no encontrado.");
+    }
+    Patient patient = *patientIt;
+    int admissionDay = enc.admission_day;
+    
+    // Verificar disponibilidad
+    if (!checkSurgeonAvailability(patient, admissionDay) ||
+        !checkOperatingTheaterAvailability(patient, admissionDay) ||
+        !checkRoomAvailability(patient, admissionDay, enc.room_id)) {
+      
+      // Intentar reparar para el paciente opcional.
+      if (!repairOptionalPatient(patient, enc)) {
+        solution.patients.push_back({ patient.id });
+        continue;  // Omitir el paciente opcional si no se puede reparar.
+      }
+      admissionDay = enc.admission_day;
+    }
+    
+    // Realizar asignaciones para el paciente opcional reparado.
+    assignSurgeon(patient, admissionDay);
+    std::string theater_id = assignOperatingTheater(patient, admissionDay);
+    assignRoom(patient, admissionDay, enc.room_id);
+    solution.patients.push_back({ patient.id, admissionDay, enc.room_id, theater_id });
+  } 
   
   /// Indice para acceder a los turnos
   std::unordered_map<std::string, int> shiftIndex;

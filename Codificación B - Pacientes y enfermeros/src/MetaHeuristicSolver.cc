@@ -19,6 +19,7 @@
 #include <iostream>
 #include <set>
 #include <unordered_map>
+#include <thread>
 
 /**
  * Constructor de la clase MetaHeuristicSolver.
