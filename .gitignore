@@ -11,3 +11,8 @@ Codificación\ B\ -\ Pacientes\ y\ enfermeros/*py
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/validator/IHTP_Validator
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/.*
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/evaluation_results
+RandomSearch/build
+RandomSearch/vcpkg
+RandomSearch/*py
+RandomSearch/validator/IHTP_Validator
+RandomSearch/.*
