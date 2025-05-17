@@ -142,7 +142,7 @@ Luego ejecuta el validador con el siguiente comando:
 ./IHTP_Validator <ruta_a_la_instancia> <ruta_a_la_solucion>
 ```
 
-Donde `<ruta_a_la_instancia>` es la ruta al archivo JSON de entrada y `<ruta_a_la_solucion>` es la ruta al archivo JSON de salida que quieres validar.
+Donde `<ruta_a_la_instancia>` es la ruta al archivo JSON de entrada y `<ruta_a_la_solucion>` es la ruta al archivo JSON que quieres validar.
 
 ## Contribuciones
 
