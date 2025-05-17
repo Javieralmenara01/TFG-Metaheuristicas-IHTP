@@ -4,8 +4,10 @@ Codificación\ A\ -\ Pacientes/vcpkg
 Codificación\ A\ -\ Pacientes/*py
 Codificación\ A\ -\ Pacientes/validator/IHTP_Validator
 Codificación\ A\ -\ Pacientes/validator/.*
+Codificación\ A\ -\ Pacientes/evaluation_results
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/build
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/vcpkg
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/*py
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/validator/IHTP_Validator
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/.*
+Codificación\ B\ -\ Pacientes\ y\ enfermeros/evaluation_results
