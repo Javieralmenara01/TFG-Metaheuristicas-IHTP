@@ -13,7 +13,7 @@ El proyecto está implementado principalmente en C++ y utiliza JSON para la entr
 |   ├── src/               # Código fuente principal en C++
 │   ├── main.cc            # Archivo principal
 │   └── CMakeLists.txt     # Archivo de configuración de CMake
-├── Codificación B - Pacientes y Recursos
+├── Codificación B - Pacientes y enfermeros
 |   ├── src/               # Código fuente principal en C++
 │   ├── main.cc            # Archivo principal
 │   └── CMakeLists.txt     # Archivo de configuración de CMake
