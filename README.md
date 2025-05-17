@@ -1,8 +1,8 @@
-# TFG - Metaheuriticas en gestión de la optimización hospitalaria
+# TFG - Metaheuristicas en gestión de la optimización hospitalaria
 
 ## Descripción
 
-Este repositorio contiene el código fuente de mi Trabajo de Fin de Grado (TFG) _Metaheuriticas en gestión de la optimización hospitalaria_, cuyo objetivo es la implementación de un algoritmo de optimización para el problema IHTP (Integrated Healthcare Timetabling Problem) presentado en la competición [IHTC](https://ihtc2024.github.io), mediente el uso de un algoritmo evolutivo.
+Este repositorio contiene el código fuente de mi Trabajo de Fin de Grado (TFG) _Metaheuristicas en gestión de la optimización hospitalaria_, cuyo objetivo es la implementación de un algoritmo de optimización para el problema IHTP (Integrated Healthcare Timetabling Problem) presentado en la competición [IHTC](https://ihtc2024.github.io), mediente el uso de un algoritmo evolutivo.
 
 El proyecto está implementado principalmente en C++ y utiliza JSON para la entrada/salida de datos. Contamos con diversos directorios, _Codificación A - Pacientes_ y _Codificación B - Pacientes y Recursos_, que representan diferentes enfoques para resolver el problema. Asimismo, se incluye el código de la primera aproximación al problema, que se trata de una búsqueda aleatoria constructiva _RandomSearch_.
 
