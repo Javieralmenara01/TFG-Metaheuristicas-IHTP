@@ -5,6 +5,8 @@ Codificación\ A\ -\ Pacientes/*py
 Codificación\ A\ -\ Pacientes/validator/IHTP_Validator
 Codificación\ A\ -\ Pacientes/validator/.*
 Codificación\ A\ -\ Pacientes/evaluation_results
+Codificación\ A\ -\ Pacientes/evaluation_results_2
+Codificación\ A\ -\ Pacientes/evaluation_results_test_dataset
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/build
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/vcpkg
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/*py
