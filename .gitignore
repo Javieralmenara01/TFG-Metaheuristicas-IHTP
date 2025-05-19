@@ -7,6 +7,9 @@ Codificación\ A\ -\ Pacientes/validator/.*
 Codificación\ A\ -\ Pacientes/evaluation_results
 Codificación\ A\ -\ Pacientes/evaluation_results_2
 Codificación\ A\ -\ Pacientes/evaluation_results_test_dataset
+Codificación\ A\ -\ Pacientes/*.csv
+Codificación\ A\ -\ Pacientes/__pycache__
+Codificación\ A\ -\ Pacientes/data
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/build
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/vcpkg
 Codificación\ B\ -\ Pacientes\ y\ enfermeros/*py
