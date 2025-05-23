@@ -9,23 +9,48 @@ El proyecto está implementado principalmente en C++ y utiliza JSON para la entr
 ## Estructura de directorios
 
 ```text
-├── Codificación A - Pacientes
-|   ├── src/               # Código fuente principal en C++
-│   ├── main.cc            # Archivo principal
-│   └── CMakeLists.txt     # Archivo de configuración de CMake
-├── Codificación B - Pacientes y enfermeros
-|   ├── src/               # Código fuente principal en C++
-│   ├── main.cc            # Archivo principal
-│   └── CMakeLists.txt     # Archivo de configuración de CMake
-├── RandomSearch           # Implementación de la búsqueda aleatoria
-│   ├── src/               # Código fuente principal en C++ 
-│   ├── main.cc            # Archivo principal
-│   └── CMakeLists.txt     # Archivo de configuración de CMake
-├── instances              # Instancias del problema en formato JSON
-├── validator              # Validador de soluciones
-├── .gitignore             # Ignorar archivos innecesarios
-└── README.md              # Este archivo
+├── Codificación A - Pacientes                 # Implementación de la codificación A 
+|   ├── src/                                      # Código fuente principal en C++
+│   ├── main.cc                                   # Archivo principal
+│   └── CMakeLists.txt                            # Archivo de configuración de CMake
+├── Codificación B - Pacientes y enfermeros    # Implementación de la codificación B  
+|   ├── src/                                      # Código fuente principal en C++
+│   ├── main.cc                                   # Archivo principal
+│   └── CMakeLists.txt                            # Archivo de configuración de CMake
+├── instances                                  # Instancias del problema en formato JSON
+│   ├── ihtc2024_copetition_instances/             # Instancias públicas de la competición 
+│   ├── ihtc2024_final_instances/                  # Instancias "ocultas" de la competición
+│   ├── ihtc2024_test_instances/                   # Instancias de prueba
+│   └── ihtc2024_test_solutions/                   # Soluciones para las instancias de prueba
+├── RandomSearch                               # Implementación de la búsqueda aleatoria
+│   ├── src/                                      # Código fuente principal en C++ 
+│   ├── main.cc                                   # Archivo principal
+│   └── CMakeLists.txt                            # Archivo de configuración de CMake
+├── validator                                  # Validador de soluciones
+│   ├── IHTP_Validator.cc                         # Código fuente del validador
+│   └── json.hpp                                  # Archivo de cabecera de la biblioteca JSON
+├── .gitignore                                 # Ignorar archivos innecesarios
+└── README.md                                  # Este archivo
 ```
+
+## Ficheros fuente
+El código fuente está organizado en diferentes directorios según la codificación utilizada. Cada directorio contiene un archivo `main.cc` que sirve como punto de entrada para el programa, así como un archivo `CMakeLists.txt` para gestionar la compilación.
+El directorio `src` contiene los archivos de implementación de las clases y funciones necesarias para resolver el problema. La estructura de los archivos es la siguiente:
+```text
+├── src/
+│   ├── Functions.cc                            # Funciones auxiliares
+│   ├── Functions.h                             # Cabecera de las funciones auxiliares
+│   ├── ProblemInstance.cc                      # Clase que representa la instancia del problema
+│   ├── ProblemInstance.h                       # Cabecera de la clase ProblemInstance
+│   ├── RandomSolver.cc                         # Clase que implementa la búsqueda aleatoria
+│   ├── RandomSolver.h                          # Cabecera de la clase RandomSolver
+│   ├── MetaHeuristicSolver.cc                  # Clase que implementa el algoritmo evolutivo
+│   ├── MetaHeuristicSolver.h                   # Cabecera de la clase MetaHeuristicSolver
+│   ├── Solver.cc                               # Clase base para el resolutor
+│   ├── Solver.h                                # Cabecera de la clase Solver
+│   └── Structs.h                               # Estructuras de datos utilizadas en el proyecto
+```
+
 
 ## Dependencias
 

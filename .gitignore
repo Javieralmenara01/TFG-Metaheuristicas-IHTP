@@ -4,9 +4,7 @@ Codificación\ A\ -\ Pacientes/vcpkg
 Codificación\ A\ -\ Pacientes/*py
 Codificación\ A\ -\ Pacientes/validator/IHTP_Validator
 Codificación\ A\ -\ Pacientes/validator/.*
-Codificación\ A\ -\ Pacientes/evaluation_results
-Codificación\ A\ -\ Pacientes/evaluation_results_2
-Codificación\ A\ -\ Pacientes/evaluation_results_test_dataset
+Codificación\ A\ -\ Pacientes/results
 Codificación\ A\ -\ Pacientes/*.csv
 Codificación\ A\ -\ Pacientes/__pycache__
 Codificación\ A\ -\ Pacientes/data
@@ -21,3 +19,4 @@ RandomSearch/vcpkg
 RandomSearch/*py
 RandomSearch/validator/IHTP_Validator
 RandomSearch/.*
+validator/IHTP_Validator
